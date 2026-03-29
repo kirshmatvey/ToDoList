@@ -12,17 +12,23 @@ function App() {
         setTasks({...tasks, [todolistId]: newTasks});
     }
 
+    function removeTodolist(todolistId: TodolistType['id']) {
+        const newTodo = todolists.filter( (t) => t.id !== todolistId)
+        delete tasks[todolistId]
+        setTodolists([...newTodo])
+    }
+
     function filterTasks(value: FilterType, todolistId: TodolistType['id']) {
         const newTodo = todolists.map( t => t.id === todolistId ? {...t, filter: value} : t )
         setTodolists([...newTodo]);
     }
 
-    function updateTask(id: string, todolistId: TodolistType['id']) {
+    function updateTask(id: TaskType['id'], todolistId: TodolistType['id']) {
         const newTasks = tasks[todolistId].map((t) => t.id === id ? {...t, status: !t.status} : t);
         setTasks({...tasks, [todolistId]: newTasks})
     }
 
-    function addTask(title: string, todolistId: TodolistType['id']) {
+    function addTask(title: TaskType['taskName'], todolistId: TodolistType['id']) {
         const task = {
             taskName: title,
             id: v1(),
@@ -63,6 +69,7 @@ function App() {
                         key={t.id}
                         id={t.id}
                         removeTask={removeTask}
+                        removeTodolist={removeTodolist}
                         filterTasks={filterTasks}
                         updateTask={updateTask}
                         addTask={addTask}

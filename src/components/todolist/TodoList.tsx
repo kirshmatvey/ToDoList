@@ -3,14 +3,16 @@ import {type ChangeEvent, type KeyboardEvent, useState} from "react";
 import type {FilterType, TaskType, TodolistType} from "../../types.ts";
 
 type TodoListPropsType = {
-    id: string;
+    id: string
     title: string
-    removeTask: (id: string, todolistId: TodolistType['id']) => void;
     tasks: TaskType[]
-    filterTasks: (value: FilterType, todolistId: TodolistType['id']) => void;
-    updateTask: (id: string, todolistId: TodolistType['id']) => void;
-    addTask: (title: string, todolistId: TodolistType['id']) => void;
     filter: FilterType
+    removeTask: (id: string, todolistId: TodolistType['id']) => void
+    removeTodolist: (todolistId: TodolistType['id']) => void
+    filterTasks: (value: FilterType, todolistId: TodolistType['id']) => void
+    updateTask: (id: string, todolistId: TodolistType['id']) => void
+    addTask: (title: string, todolistId: TodolistType['id']) => void
+
 }
 
 export const TodoList = (props: TodoListPropsType) => {
@@ -49,7 +51,7 @@ export const TodoList = (props: TodoListPropsType) => {
 
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h3>{props.title} <Button title={'x'} onClickHandler={() => {props.removeTodolist(props.id)}}/></h3>
             <div>
                 <input className={isInputEmpty ? 'error' : ''} value={input} onChange={inputTitleUpdateHandler} onKeyUp={onKeyPressHandler}/>
                 <Button disabled={isInputEmpty} title={'+'} onClickHandler={taskAdditionHandler}/>
