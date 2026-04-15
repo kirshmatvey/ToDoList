@@ -4,9 +4,11 @@ import {useState} from "react";
 import {handleTaskFiltering} from "./utils.ts";
 import type {FilterType, TaskType, TodolistType} from "./types.ts";
 import {v1} from "uuid";
+import {Input} from "./components/input/Input.tsx";
 
 function App() {
 
+    //CRUD функции тудулиста
     function removeTask(id: TaskType['id'], todolistId: TodolistType['id']) {
         const newTasks = tasks[todolistId].filter((t) => t.id !== id);
         setTasks({...tasks, [todolistId]: newTasks});
@@ -38,6 +40,14 @@ function App() {
         setTasks({...tasks, [todolistId]: newTasks})
     }
 
+    //добавление тудулиста
+    function addTodolist(title: string) {
+        const newTodolistId = v1()
+        setTodolists([{title: title, id: newTodolistId, filter: 'all'}, ...todolists])
+        setTasks({[newTodolistId]: [], ...tasks})
+    }
+
+    //стейты и моковые значения тудулистов
     const todolistId1 = v1()
     const todolistId2 = v1()
 
@@ -46,7 +56,7 @@ function App() {
             {taskName: 'Bread', id: v1(), status: false},
             {taskName: 'Milk', id: v1(), status: false},
             {taskName: 'Onions', id: v1(), status: true},
-            {taskName: 'React', id: v1(), status: false},
+            {taskName: 'Meat', id: v1(), status: false},
         ],
         [todolistId2]: [
             {taskName: 'HTML', id: v1(), status: false},
@@ -63,6 +73,7 @@ function App() {
 
     return (
         <div className="app">
+            <Input inputSubmitHandler={addTodolist}/>
             {todolists.map((t) => {
                 return (
                     <TodoList

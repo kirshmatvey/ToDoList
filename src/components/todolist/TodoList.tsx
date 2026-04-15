@@ -1,6 +1,6 @@
 import {Button} from "../button/Button.tsx";
-import {type ChangeEvent, type KeyboardEvent, useState} from "react";
 import type {FilterType, TaskType, TodolistType} from "../../types.ts";
+import {Input} from "../input/Input.tsx";
 
 type TodoListPropsType = {
     id: string
@@ -17,22 +17,8 @@ type TodoListPropsType = {
 
 export const TodoList = (props: TodoListPropsType) => {
 
-    const [input, setInput] = useState("");
-    const error = 'Title is required';
-    const isInputEmpty = input.trim() === ''
-
-    const inputTitleUpdateHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setInput(e.currentTarget.value)
-    }
-    const onKeyPressHandler = (e:KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && !isInputEmpty) {
-            props.addTask(input, props.id)
-            setInput("")
-        }
-    }
-    const taskAdditionHandler = () => {
+    const taskAdditionHandler = (input: string) => {
         props.addTask(input, props.id);
-        setInput("");
     }
 
     const taskList = props.tasks.length > 0 ? props.tasks.map(task => {
@@ -41,7 +27,7 @@ export const TodoList = (props: TodoListPropsType) => {
                 <input onChange={() => {props.updateTask(task.id, props.id)}}
                        type="checkbox"
                        checked={task.status}/>
-                <span>{task.taskName}</span>
+                <span>{task.taskName} </span>
                 <Button title={'x'}
                         onClickHandler={() => {props.removeTask(task.id, props.id)}}/>
             </li>
@@ -52,11 +38,7 @@ export const TodoList = (props: TodoListPropsType) => {
     return (
         <div>
             <h3>{props.title} <Button title={'x'} onClickHandler={() => {props.removeTodolist(props.id)}}/></h3>
-            <div>
-                <input className={isInputEmpty ? 'error' : ''} value={input} onChange={inputTitleUpdateHandler} onKeyUp={onKeyPressHandler}/>
-                <Button disabled={isInputEmpty} title={'+'} onClickHandler={taskAdditionHandler}/>
-            </div>
-            {isInputEmpty && <div className="error-message">{error}</div>}
+            <Input inputSubmitHandler={taskAdditionHandler}/>
             <ul>
                 {taskList}
             </ul>
