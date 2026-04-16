@@ -8,16 +8,10 @@ import {Input} from "./components/input/Input.tsx";
 
 function App() {
 
-    //CRUD функции тудулиста
+    //Task manipulation
     function removeTask(id: TaskType['id'], todolistId: TodolistType['id']) {
         const newTasks = tasks[todolistId].filter((t) => t.id !== id);
         setTasks({...tasks, [todolistId]: newTasks});
-    }
-
-    function removeTodolist(todolistId: TodolistType['id']) {
-        const newTodo = todolists.filter( (t) => t.id !== todolistId)
-        delete tasks[todolistId]
-        setTodolists([...newTodo])
     }
 
     function filterTasks(value: FilterType, todolistId: TodolistType['id']) {
@@ -40,11 +34,25 @@ function App() {
         setTasks({...tasks, [todolistId]: newTasks})
     }
 
-    //добавление тудулиста
+    function changeTaskTitle(newTitle: TaskType['taskName'], todolistId: TodolistType['id'], id: TaskType['id']) {
+        setTasks({...tasks, [todolistId]: tasks[todolistId].map((t) => t.id === id ? {...t, taskName: newTitle} : t)})
+    }
+
+    //Todolist manipulation
     function addTodolist(title: string) {
         const newTodolistId = v1()
         setTodolists([{title: title, id: newTodolistId, filter: 'all'}, ...todolists])
         setTasks({[newTodolistId]: [], ...tasks})
+    }
+
+    function removeTodolist(todolistId: TodolistType['id']) {
+        const newTodo = todolists.filter( (t) => t.id !== todolistId)
+        delete tasks[todolistId]
+        setTodolists([...newTodo])
+    }
+
+    function changeTodolistTitle(title: TodolistType['title'], todolistId: TodolistType['id']) {
+        setTodolists(todolists.map((t) => t.id === todolistId ? {...t, title: title} : t))
     }
 
     //стейты и моковые значения тудулистов
@@ -87,6 +95,8 @@ function App() {
                         tasks={handleTaskFiltering(tasks[t.id], t.filter)}
                         title={t.title}
                         filter={t.filter}
+                        changeTodolistTitle={changeTodolistTitle}
+                        changeTaskTitle={changeTaskTitle}
                     />
                 )
             })}
