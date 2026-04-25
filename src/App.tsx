@@ -104,7 +104,7 @@ function App() {
                 <Box sx={{margin: '20px 0'}}>
                     <Input inputSubmitHandler={addTodolist}/>
                 </Box>
-                <Grid container columns={4} spacing={'auto'}>
+                <Grid container columns={4} spacing={7}>
                     {todolists.map((t) => {
                         return (
                             <TodoList
