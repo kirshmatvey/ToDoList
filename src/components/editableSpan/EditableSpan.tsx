@@ -1,9 +1,10 @@
 import {useState} from "react";
+import {TextField, Typography} from "@mui/material";
 
 type EditableSpanPropsType = {
     title: string
     changeItemTitle: (title: string) => void
-    spanClassName?: string
+    status?: boolean
 }
 
 export const EditableSpan = (props: EditableSpanPropsType) => {
@@ -15,12 +16,18 @@ export const EditableSpan = (props: EditableSpanPropsType) => {
         setIsBeingEdited(false);
     }
     return (
-        isBeingEdited ? <input onBlur={EditOff}
-                               onKeyDown={(e) => { if (e.key === 'Enter') {EditOff()} }}
-                               onChange={(e) => setItemTitle(e.currentTarget.value)}
-                               value={itemTitle}
-                               autoFocus/>
-            : <span onDoubleClick={EditOn}>{props.title}</span>
+        isBeingEdited ? <TextField variant={'standard'}
+                                   onBlur={EditOff}
+                                   onKeyDown={(e) => {
+                                       if (e.key === 'Enter') {
+                                           EditOff()
+                                       }
+                                   }}
+                                   onChange={(e) => setItemTitle(e.currentTarget.value)}
+                                   value={itemTitle}
+                                   autoFocus
+            />
+            : <Typography sx={props.status ? {display: 'inline-block', textDecoration: "line-through", opacity: "0.5"} : {display: 'inline-block'}} variant={'body1'} onDoubleClick={EditOn}>{props.title}</Typography>
     );
 };
 

@@ -5,6 +5,9 @@ import {handleTaskFiltering} from "./utils.ts";
 import type {FilterType, TaskType, TodolistType} from "./types.ts";
 import {v1} from "uuid";
 import {Input} from "./components/input/Input.tsx";
+import {AppBar, Box, Grid, IconButton, Toolbar, Typography} from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
 
 function App() {
 
@@ -80,28 +83,49 @@ function App() {
     ])
 
     return (
-        <div className="app">
-            <Input inputSubmitHandler={addTodolist}/>
-            {todolists.map((t) => {
-                return (
-                    <TodoList
-                        key={t.id}
-                        id={t.id}
-                        removeTask={removeTask}
-                        removeTodolist={removeTodolist}
-                        filterTasks={filterTasks}
-                        updateTask={updateTask}
-                        addTask={addTask}
-                        tasks={handleTaskFiltering(tasks[t.id], t.filter)}
-                        title={t.title}
-                        filter={t.filter}
-                        changeTodolistTitle={changeTodolistTitle}
-                        changeTaskTitle={changeTaskTitle}
-                    />
-                )
-            })}
-
-        </div>
+        <>
+            <AppBar position="sticky">
+                <Toolbar variant="dense">
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{
+                            color: 'inherit',
+                        }}
+                    >
+                        ToDoLists
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <Container maxWidth="xl">
+                <Box sx={{margin: '20px 0'}}>
+                    <Input inputSubmitHandler={addTodolist}/>
+                </Box>
+                <Grid container columns={4} spacing={'auto'}>
+                    {todolists.map((t) => {
+                        return (
+                            <TodoList
+                                key={t.id}
+                                id={t.id}
+                                removeTask={removeTask}
+                                removeTodolist={removeTodolist}
+                                filterTasks={filterTasks}
+                                updateTask={updateTask}
+                                addTask={addTask}
+                                tasks={handleTaskFiltering(tasks[t.id], t.filter)}
+                                title={t.title}
+                                filter={t.filter}
+                                changeTodolistTitle={changeTodolistTitle}
+                                changeTaskTitle={changeTaskTitle}
+                            />
+                        )
+                    })}
+                </Grid>
+            </Container>
+        </>
     )
 }
 

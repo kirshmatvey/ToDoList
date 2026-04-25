@@ -1,5 +1,6 @@
-import {Button} from "../button/Button.tsx";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import {type ChangeEvent, type KeyboardEvent, useState} from "react";
+import {IconButton, TextField} from "@mui/material";
 
 type InputPropsType = {
     inputSubmitHandler: (input: string) => void
@@ -39,8 +40,16 @@ export const Input = (props: InputPropsType) => {
     return (
         <div className={'add-item-input'}>
             <div>
-                <input className={error ? 'error' : ''} value={input} onChange={inputTitleUpdateHandler} onBlur={onButtonClickHandler} onKeyDown={onKeyPressHandler}/>
-                <Button disabled={isInputEmpty} title={'+'} onClickHandler={onButtonClickHandler}/>
+                <TextField
+                    variant={'outlined'}
+                    size={'small'}
+                    value={input}
+                    onChange={inputTitleUpdateHandler}
+                    onBlur={onButtonClickHandler}
+                    onKeyDown={onKeyPressHandler}
+                    color={error ? 'error' : 'primary'}
+                />
+                <IconButton disabled={isInputEmpty} onClick={onButtonClickHandler}><AddBoxIcon/></IconButton>
             </div>
             {error && <span className={'error-message'}>This field is required</span>}
         </div>

@@ -1,7 +1,8 @@
-import {Button} from "../button/Button.tsx";
+import DeleteIcon from '@mui/icons-material/Delete';
 import type {FilterType, TaskType, TodolistType} from "../../types.ts";
 import {Input} from "../input/Input.tsx";
 import {EditableSpan} from "../editableSpan/EditableSpan.tsx";
+import {Button, IconButton, List, ListItem, Paper} from "@mui/material";
 
 type TodoListPropsType = {
     id: string
@@ -24,35 +25,45 @@ export const TodoList = (props: TodoListPropsType) => {
     }
 
     const taskList = props.tasks.length > 0 ? props.tasks.map(task => {
-        return (
-            <li key={task.id} className={task.status ? 'completed-task' : ''}>
-                <input onChange={() => {props.updateTask(task.id, props.id)}}
-                       type="checkbox"
-                       checked={task.status}/>
-                <EditableSpan title={task.taskName} changeItemTitle={(title: string) => props.changeTaskTitle(title, props.id, task.id)}/>
-                <Button title={'x'}
-                        onClickHandler={() => {props.removeTask(task.id, props.id)}}/>
-            </li>
-        )
-    })
+            return (
+                <ListItem sx={{padding: '0'}} key={task.id}>
+                    <input onChange={() => {
+                        props.updateTask(task.id, props.id)
+                    }}
+                           type="checkbox"
+                           checked={task.status}/>
+                    <EditableSpan status={task.status} title={task.taskName}
+                                  changeItemTitle={(title: string) => props.changeTaskTitle(title, props.id, task.id)}/>
+                    <IconButton onClick={() => {
+                        props.removeTask(task.id, props.id)
+                    }}><DeleteIcon/></IconButton>
+                </ListItem>
+            )
+        })
         : <span>No tasks to learn</span>
 
     return (
-        <div>
+        <Paper sx={{padding: '0 20px 20px'}} elevation={3}>
             <h3>
-                <EditableSpan title={props.title} changeItemTitle={(title: string) => props.changeTodolistTitle(title, props.id)}/>
-                <Button title={'x'} onClickHandler={() => {props.removeTodolist(props.id)}}/>
+                <EditableSpan title={props.title}
+                              changeItemTitle={(title: string) => props.changeTodolistTitle(title, props.id)}/>
+                <IconButton onClick={() => {
+                    props.removeTodolist(props.id)
+                }}><DeleteIcon/></IconButton>
             </h3>
             <Input inputSubmitHandler={taskAdditionHandler}/>
-            <ul>
+            <List>
                 {taskList}
-            </ul>
+            </List>
             <div className={'filter-button-wrapper'}>
-                <Button title={'All'} className={props.filter === 'all' ? 'active-button' : ''} onClickHandler={() => props.filterTasks('all', props.id)}/>
-                <Button title={'Active'} className={props.filter === 'active' ? 'active-button' : ''} onClickHandler={() => props.filterTasks('active', props.id)}/>
-                <Button title={'Completed'} className={props.filter === 'completed' ? 'active-button' : ''} onClickHandler={() => props.filterTasks('completed', props.id)}/>
+                <Button variant={props.filter === 'all' ? 'contained' : 'outlined'}
+                        onClick={() => props.filterTasks('all', props.id)}>All</Button>
+                <Button variant={props.filter === 'active' ? 'contained' : 'outlined'}
+                        onClick={() => props.filterTasks('active', props.id)}>Active</Button>
+                <Button variant={props.filter === 'completed' ? 'contained' : 'outlined'}
+                        onClick={() => props.filterTasks('completed', props.id)}>Completed</Button>
             </div>
-        </div>
+        </Paper>
     )
 }
 
